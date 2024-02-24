@@ -23,7 +23,7 @@ type RedisDBInstance struct {
 var DB DBInstance
 var RedisDB RedisDBInstance
 
-func ConnectDatabase() {
+func ConnectDatabase() *gorm.DB {
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=5432 sslmode=disable TimeZone=Asia/Shanghai",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
@@ -42,19 +42,15 @@ func ConnectDatabase() {
 		os.Exit(1)
 	}
 
-	DB = DBInstance{
-		DataBase: db,
-	}
+	return db
 }
 
-func ConnectToRedis() {
+func ConnectToRedis() *redis.Client {
 	client := redis.NewClient(&redis.Options{
 		Addr:     "redis:6379",
 		Password: "1234",
 		DB:       0, // use default DB
 	})
-
-	RedisDB = RedisDBInstance{
-		Client: client,
-	}
+	
+	return client
 }
