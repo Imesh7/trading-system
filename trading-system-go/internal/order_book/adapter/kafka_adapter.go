@@ -37,8 +37,8 @@ func NewOrderBookKafkaAdpater(orderBookService ports.OrderBookService) *KafkaAda
 		log.Fatal(err)
 	}
 	return &KafkaAdapter{
-		producer:      producer,
-		consumerGroup: consumerGroup,
+		producer:         producer,
+		consumerGroup:    consumerGroup,
 		orderBookService: orderBookService,
 	}
 }
@@ -58,6 +58,7 @@ func (kafkaAdapter KafkaAdapter) CreateOrderBookProducer(topic string, order int
 		Timestamp: time.Time{},
 	}
 
+	fmt.Println("Producing the message........", message)
 	_, _, err = kafkaAdapter.producer.SendMessage(message)
 	if err != nil {
 		log.Fatal(err)
@@ -66,7 +67,7 @@ func (kafkaAdapter KafkaAdapter) CreateOrderBookProducer(topic string, order int
 	return nil
 }
 
-func (kafkaAdapter KafkaAdapter) CreateBidConsumer(topic string /* , handler func([]byte) */) error {
+func (kafkaAdapter KafkaAdapter) CreateBidConsumer(topic string) error {
 
 	defer func() {
 		if err := kafkaAdapter.consumerGroup.Close(); err != nil {
@@ -77,19 +78,6 @@ func (kafkaAdapter KafkaAdapter) CreateBidConsumer(topic string /* , handler fun
 	for {
 		kafkaAdapter.consumerGroup.Consume(ctx, []string{topic}, &kafkaAdapter)
 	}
-
-	/* for {
-		select {
-		case msg := <-kafkaAdapter.consumerGroup.Consume():
-			//valueString := string(msg.Value)
-			//fmt.Fprintln(os.Stdout, []any{"Received bid for consumer:", valueString}...)
-			//match_order.MatchOrder(valueString)
-
-
-		case <-signals:
-			return
-		}
-	} */
 }
 
 func removeElement(slice []*websocket.Conn, index int) []*websocket.Conn {
@@ -111,7 +99,6 @@ func (ka *KafkaAdapter) Cleanup(sarama.ConsumerGroupSession) error {
 
 func (ka *KafkaAdapter) ConsumeClaim(session sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {
 	for message := range claim.Messages() {
-		fmt.Println("process---------", message.Value)
 		var order order.Order
 		err := json.Unmarshal(message.Value, &order)
 		if err != nil {

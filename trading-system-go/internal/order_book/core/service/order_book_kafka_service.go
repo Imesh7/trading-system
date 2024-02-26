@@ -18,22 +18,7 @@ func NewOrderBookKakfkaService(adapter *adapter.KafkaAdapter) *orderBookKafkaSer
 func (service *orderBookKafkaService) CreateOrderBookProducer(topic string, order *order.Order) error {
 	return service.adapter.CreateOrderBookProducer(topic, order)
 }
-func (service *orderBookKafkaService) CreateBidConsumer(topic string/* , handler func([]byte) */) error {
-	service.adapter.CreateBidConsumer(topic, /* handler */)
-	/* con := routes.Conn["btc"]
-
-	jsonData, err := json.Marshal(handler.Value)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Println(msg.Value)
-	for i, v := range con {
-		err := v.WriteMessage(1, msg.Value)
-		if err != nil {
-			log.Print(err)
-			con = removeElement(con, i)
-		}
-	} */
-
+func (service *orderBookKafkaService) CreateBidConsumer(topic string) error {
+	service.adapter.CreateBidConsumer(topic)
 	return nil
 }

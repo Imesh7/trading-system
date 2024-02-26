@@ -19,7 +19,7 @@ type orderMatchService struct {
 
 func NewOrderMatchService(repo ports.OrderRepository, orderBookService order_book.OrderBookService, orderBookKafkaService order_book.OrderBookKafka) *orderMatchService {
 	return &orderMatchService{
-		repo: repo,
+		repo:                  repo,
 		orderBookService:      orderBookService,
 		orderBookKafkaService: orderBookKafkaService,
 	}
@@ -29,6 +29,8 @@ func (orderMatchService *orderMatchService) MatchOrder(orderId int) {
 	//var order order.Order
 	//first get the unfilled or partfilled order with opposite
 	//order type of this particular order
+	fmt.Println("order id.........",orderId)
+
 	orderData, err := orderMatchService.repo.FindOrder(orderId)
 	if err != nil {
 		log.Panic(err)
@@ -46,14 +48,14 @@ func (orderMatchService *orderMatchService) MatchOrder(orderId int) {
 		//remove from the order & create a sell order against,
 
 		sellOrderList := orderMatchService.orderBookService.GetOrderBook(ctx, sellOrderkey)
-
+		fmt.Println("sell-order-list", sellOrderList)
 		if len(sellOrderList) == 0 {
 			//add a new buy order to the orderbook
 			err := orderMatchService.orderBookService.AddToOrderBook(ctx, buyOrderkey, orderData.OrderId, serializeOrder(orderData))
-			orderMatchService.orderBookKafkaService.CreateOrderBookProducer("order-book", orderData)
 			if err != nil {
 				log.Fatal(err)
 			}
+			orderMatchService.orderBookKafkaService.CreateOrderBookProducer("order-book", orderData)
 
 		} else {
 			//sort the order with the price low to high
@@ -116,7 +118,6 @@ func (orderMatchService *orderMatchService) MatchOrder(orderId int) {
 		//first try to match with the redis after that get that order & validate it &
 		//remove from the order & create a sell order against,
 		buyOrderList := orderMatchService.orderBookService.GetOrderBook(ctx, buyOrderkey)
-
 		if len(buyOrderList) == 0 {
 			orderMatchService.orderBookService.AddToOrderBook(ctx, sellOrderkey, orderData.OrderId, serializeOrder(orderData))
 			orderMatchService.orderBookKafkaService.CreateOrderBookProducer("order-book", orderData)

@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"log"
-
 	order "trading-system-go/internal/order/core/domain"
 	"trading-system-go/internal/order_book/core/ports"
 
@@ -15,43 +14,46 @@ type orderBookService struct {
 	repository ports.OrderBookRepository
 }
 
+var socketConnections map[string]map[string]*websocket.Conn
+
 func NewOrderBookService(repository ports.OrderBookRepository) *orderBookService {
+	socketConnections = make(map[string]map[string]*websocket.Conn)
 	return &orderBookService{
 		repository: repository,
 	}
 }
 
-var socketConnections map[string][]*websocket.Conn
-
-func init() {
-	socketConnections = make(map[string][]*websocket.Conn)
-}
-
 func (service *orderBookService) ConnectWithOrderBook(socket *websocket.Conn) {
 	pairConn := socket.Query("pair")
+	userId := socket.Query("userid")
 
-	socketConnections[pairConn] = append(socketConnections[pairConn], socket)
+	if socketConnections[pairConn] == nil {
+		socketConnections[pairConn] = make(map[string]*websocket.Conn)
+	}
+
+	socketConnections[pairConn][userId] = socket
+
 	defer socket.Close()
-	fmt.Println("received websocket conn req.........................", len(socketConnections[pairConn]))
+	fmt.Println("Received websocket reqest...", len(socketConnections[pairConn]))
 	var msg any
 	for {
 		err := socket.ReadJSON(&msg)
 		if err != nil {
-			// optional: log the error
+			fmt.Println("socket reading error........")
+			log.Println(err)
 			break
 		}
 	}
 }
 
 func (service *orderBookService) WriteConnectedSocketToOrderBookUpdates(message []byte) {
-	con := socketConnections["btc"]
-
-	for i, v := range con {
+	connection := socketConnections["btc"]
+	for k, v := range connection {
+		fmt.Println("loop is going", k, v)
 		err := v.WriteMessage(1, message)
 		if err != nil {
 			fmt.Println("error is -------", err)
-			log.Print(err)
-			con = removeElement(con, i)
+			delete(connection, k)
 		}
 	}
 }
@@ -67,13 +69,4 @@ func (service *orderBookService) RemoveFromOrderBook(ctx context.Context, orderT
 }
 func (service *orderBookService) UpdateOrderBook(ctx context.Context, orderType string, orderId int, updatedOrder string) error {
 	return service.repository.UpdateOrderBook(ctx, orderType, orderId, updatedOrder)
-}
-
-func removeElement(slice []*websocket.Conn, index int) []*websocket.Conn {
-	if index < 0 || index >= len(slice) {
-		fmt.Println("Invalid index")
-		return slice
-	}
-
-	return append(slice[:index], slice[index+1:]...)
 }
