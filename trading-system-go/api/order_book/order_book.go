@@ -1,12 +1,12 @@
-package order_book
+package order_books
 
 import (
 	"context"
 	"encoding/json"
 	"fmt"
 	"strconv"
-	"trading-system-go/database"
-	"trading-system-go/internal/data/order"
+	"trading-system-go/internal/database"
+	order "trading-system-go/internal/order/core/domain"
 )
 
 // get latest orderbook data

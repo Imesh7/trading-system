@@ -7,8 +7,7 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
-	"trading-system-go/database"
+	"trading-system-go/internal/database"
 	routes "trading-system-go/internal/route"
 
 	"github.com/go-playground/assert/v2"

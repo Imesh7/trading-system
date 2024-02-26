@@ -1,7 +1,6 @@
 package order_kafka_consumer
 
 import (
-	//"encoding/json"
 	"fmt"
 	"log"
 	"os"
@@ -47,7 +46,7 @@ func OrderMatchConsumer(topic string) {
 		case msg := <-partitionConsumer.Messages():
 			valueString := string(msg.Value)
 			fmt.Fprintln(os.Stdout, []any{"Received integer value: %s", valueString}...)
-			match_order.MatchOrder(valueString)
+			match_order.MatchOrder(string(msg.Value))
 		case <-signals:
 			return
 		}

@@ -24,9 +24,19 @@ export default function Home() {
   const [orderBookAsks, setOrderBookAsks] = useState<Order[]>([]);
 
   useEffect(() => {
+    /* const order: Order = {
+      order_type: 4,
+      type: OrderType.bid,
+      price: 20,
+      volume: 150,
+      buying_pair: "usd",
+      selling_pair: "btc",
+    };
+    setOrderBookBids((old) => [...old, order]);
+    setOrderBookAsks((old) => [...old, order]); */
     console.log("Printed on the server-side");
     const socket = new WebSocket(
-      "ws://localhost:8000/order-book-update?pair=btc"
+      "ws://localhost:8000/order-book-update?pair=btc&userid=1"
     );
     socket.onopen = () => {
       console.log("Connected to the WebSocket server");
@@ -36,15 +46,12 @@ export default function Home() {
     socket.onmessage = (event) => {
       console.log("Received message from server:", event.data);
       const order: Order = JSON.parse(event.data);
-      console.log("decodeed data :", orderBookBids);
       if (order.type === "bid") {
-        if (orderBookBids.length === 0) {
-          setOrderBookBids((old) => [...old, order]);
-        }
         setOrderBookBids((old) => [...old, order]);
-        console.log("decodeed data :", order);
-      } else {
+        console.log("order book bids :", order);
+      } else if (order.type === "ask") {
         setOrderBookAsks((old) => [...old, order]);
+        console.log("order book asks :", order);
       }
     };
 
@@ -72,17 +79,17 @@ export default function Home() {
   function Component() {
     return (
       <div
-        className="grid grid-cols-2 gap-4 w-full max-w-2xl mx-auto py-4 px-4 md:px2"
+        className="grid grid-cols-1 gap-2 w-full max-w-2xl mx-auto py-4 px-4 md:px2"
         style={{ height: "90vh", width: "100%" }}
       >
-        <div className="space-y-3">
+        <div>
           <h2 className="text-2xl font-bold tracking-tight">Order Book</h2>
           {/* <div className="grid gap-4 bg-gray-100 dark:bg-gray-800 rounded-lg p-3"> */}
           <OrderBookCardTile />
-          <AutoSizer>
+          <AutoSizer id="AskOrder">
             {({ height, width }) => (
               <List
-                className="grid gap-4 bg-gray-100 dark:bg-gray-800 rounded-lg p-3"
+                className="grid gap-4 bg-gray-100 dark:bg-gray-900 rounded-lg p-3"
                 itemSize={orderBookAsks.length}
                 itemCount={orderBookAsks.length}
                 height={height / 2}
@@ -98,10 +105,14 @@ export default function Home() {
               </List>
             )}
           </AutoSizer>
-          <AutoSizer>
+        </div>
+
+        <div>
+          <OrderBookCardTile />
+          <AutoSizer id="BidOrder">
             {({ height, width }) => (
               <List
-                className="grid gap-4 bg-gray-100 dark:bg-gray-800 rounded-lg p-3"
+                className="grid gap-4 bg-gray-100 dark:bg-gray-900 rounded-lg p-3"
                 itemSize={orderBookBids.length}
                 itemCount={orderBookBids.length}
                 height={height / 2}
@@ -119,7 +130,6 @@ export default function Home() {
           </AutoSizer>
         </div>
       </div>
-      /* </div> */
     );
   }
 
@@ -142,7 +152,7 @@ export default function Home() {
       data && (
         <div
           key={index}
-          className="grid grid-cols-3 gap-4 text-sm font-medium text-green-500 dark:text-green-400"
+          className="grid grid-cols-3 gap-4 text-sm font-medium text-red-500 dark:text-red-400"
         >
           <span>{data.price}</span>
           <span>{data.volume}</span>
@@ -161,7 +171,7 @@ export default function Home() {
       data && (
         <div
           key={index}
-          className="grid grid-cols-3 gap-4 text-sm font-medium text-red-500 dark:text-red-400"
+          className="grid grid-cols-3 gap-4 text-sm font-medium text-green-500 dark:text-green-400"
         >
           <span>{data.price}</span>
           <span>{data.volume}</span>
@@ -205,6 +215,32 @@ export default function Home() {
         >
           {Row}
         </List>
+      </div>
+    );
+  };
+
+  const Component1 = () => {
+    return (
+      <div className="grid items-start gap-4 p-4 border rounded-lg w-full max-w-2xl">
+        <div className="grid gap-1 text-sm font-medium">
+          <div className="flex items-center justify-between">
+            <span>Price (USDT)</span>
+            <span className="text-right">Amount (BTC)</span>
+            <span className="text-right">Amount (BTC)</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-green-500">101.50</span>
+            <span className="text-green-500">101.50</span>
+            <span className="text-right">0.250</span>
+          </div>
+        </div>
+        <div className="grid gap-1 text-sm font-medium">
+          <div className="flex items-center justify-between">
+            <span className="text-red-500">100.90</span>
+            <span className="text-right">0.250</span>
+            <span className="text-right">0.250</span>
+          </div>
+        </div>
       </div>
     );
   };
