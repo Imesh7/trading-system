@@ -3,6 +3,8 @@
 
 # Trading system using go + next.js
 
+Trading system with go + postgres + kafka + redis + websocket + next.js
+
 https://github.com/Imesh7/trading-system/assets/50042375/9980ef08-aa57-4bcb-8841-d9038234b3b8
 
 
