@@ -5,18 +5,12 @@ import Link from "next/link";
 
 export const LoginButton = () => {
   return (
-    <button onClick={() => signIn("asgardeo")}>
+    <button onClick={() => signIn("asgardeo", { callbackUrl: "/" })}>
       Sign in
     </button>
   );
 };
 
-
 export const LogOutButton = () => {
-  return (
-    <button onClick={() => signOut()}>
-      Sign out
-    </button>
-  );
+  return <button onClick={() => signOut()}>Sign out</button>;
 };
-
