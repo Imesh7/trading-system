@@ -9,6 +9,6 @@ COPY . .
 USER 10014
 
 
-RUN go mod download
+RUN go mod tidy
 
 CMD ["go", "run", "main.go"]
