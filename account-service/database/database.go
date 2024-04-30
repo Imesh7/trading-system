@@ -2,9 +2,11 @@ package database
 
 import (
 	"fmt"
+	"log"
 	"os"
 
 	"github.com/go-redis/redis"
+	"github.com/lpernett/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -21,6 +23,10 @@ type RedisDBInstance struct {
 var DB DBInstance
 
 func ConnectDatabase() *gorm.DB {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
 	dsn := fmt.Sprintf("host=%s user=%s password=%s dbname=%s port=%s",
 		os.Getenv("DB_HOST"),
 		os.Getenv("DB_USER"),
