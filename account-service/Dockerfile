@@ -11,4 +11,4 @@ USER 10014
 
 RUN go mod download
 
-CMD ["go", "run", "cmd/main.go"]
+CMD ["go", "run", "main.go"]
