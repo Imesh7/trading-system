@@ -6,4 +6,7 @@ RUN go install github.com/cosmtrek/air@latest
 
 COPY . .
 
+USER 10014
+
+
 RUN go mod tidy
