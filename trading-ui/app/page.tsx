@@ -4,6 +4,8 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FixedSizeList as List } from "react-window";
 import AutoSizer from "react-virtualized-auto-sizer";
+import { useSession } from "next-auth/react";
+import { LoginButton } from "./components/button";
 
 enum OrderType {
   bid = "bid",
@@ -19,6 +21,7 @@ interface Order {
 }
 
 export default function Home() {
+  const { status } = useSession();
   const [orderBookBids, setOrderBookBids] = useState<Order[]>([]);
   const [orderBookAsks, setOrderBookAsks] = useState<Order[]>([]);
 
@@ -243,10 +246,16 @@ export default function Home() {
       </div>
     );
   };
-
   return (
     <main className="flex">
-      <Component />
+      {status === "authenticated" ? (
+        <Component />
+      ) : (
+        <div className="flex flex-col items-center justify-center">
+          <p className="text-xl p-24">You are not logged in!</p>
+          <LoginButton />
+        </div>
+      )}
     </main>
   );
 }
