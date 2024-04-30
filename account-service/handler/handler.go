@@ -3,7 +3,6 @@ package account_handler
 import (
 	"account-service/account"
 	"time"
-
 	"github.com/gofiber/fiber/v2"
 	"gorm.io/gorm"
 )

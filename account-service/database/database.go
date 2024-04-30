@@ -5,7 +5,6 @@ import (
 	"log"
 	"os"
 
-	"github.com/go-redis/redis"
 	"github.com/lpernett/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -16,9 +15,6 @@ type DBInstance struct {
 	DataBase *gorm.DB
 }
 
-type RedisDBInstance struct {
-	Client *redis.Client
-}
 
 var DB DBInstance
 
