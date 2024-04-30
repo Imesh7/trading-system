@@ -2,7 +2,7 @@ module account-service
 
 go 1.21.3
 
-require github.com/gofiber/fiber/v2 v2.51.0
+require github.com/gofiber/fiber/v2 v2.51.1
 
 require (
 	github.com/jackc/pgpassfile v1.0.0 // indirect
