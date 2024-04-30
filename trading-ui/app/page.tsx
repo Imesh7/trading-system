@@ -3,7 +3,6 @@
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { FixedSizeList as List } from "react-window";
-import useWindowDimensions from "./hook/use_window_dimetion";
 import AutoSizer from "react-virtualized-auto-sizer";
 
 enum OrderType {
