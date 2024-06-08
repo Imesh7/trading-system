@@ -34,7 +34,7 @@ require (
 	github.com/go-playground/assert/v2 v2.2.0
 	github.com/go-redis/redis v6.15.9+incompatible // indirect
 	github.com/gofiber/fiber v1.14.6 // indirect
-	github.com/gofiber/fiber/v2 v2.51.0 // indirect
+	github.com/gofiber/fiber/v2 v2.51.1 // indirect
 	github.com/gofiber/utils v1.1.0 // indirect
 	github.com/gohugoio/hugo v0.119.0 // indirect
 	github.com/golang/snappy v0.0.4 // indirect
