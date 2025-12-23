@@ -1,6 +1,6 @@
 module trading-system-go
 
-go 1.23.0
+go 1.24.0
 
 require github.com/gofiber/contrib/websocket v1.3.0
 
@@ -8,7 +8,7 @@ require (
 	github.com/fasthttp/websocket v1.5.7 // indirect
 	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/savsgio/gotils v0.0.0-20230208104028-c358bd845dee // indirect
-	golang.org/x/sync v0.12.0 // indirect
+	golang.org/x/sync v0.18.0 // indirect
 )
 
 require (
@@ -48,10 +48,10 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
-	golang.org/x/crypto v0.36.0 // indirect
-	golang.org/x/net v0.38.0 // indirect
-	golang.org/x/sys v0.31.0 // indirect
-	golang.org/x/text v0.23.0 // indirect
+	golang.org/x/crypto v0.45.0 // indirect
+	golang.org/x/net v0.47.0 // indirect
+	golang.org/x/sys v0.38.0 // indirect
+	golang.org/x/text v0.31.0 // indirect
 	gorm.io/driver/postgres v1.5.4
 	gorm.io/gorm v1.25.5
 )
