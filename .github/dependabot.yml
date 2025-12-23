@@ -10,7 +10,7 @@ updates:
     schedule:
       interval: "weekly"
     open-pull-requests-limit: 5
-    automerge: true
+    # automerge: true
     groups:
       go-dependencies:
         patterns:
