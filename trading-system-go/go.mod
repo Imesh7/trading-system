@@ -51,5 +51,5 @@ require (
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/text v0.31.0 // indirect
 	gorm.io/driver/postgres v1.6.0
-	gorm.io/gorm v1.25.10
+	gorm.io/gorm v1.31.1
 )
